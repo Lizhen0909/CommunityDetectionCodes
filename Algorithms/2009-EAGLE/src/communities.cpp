@@ -133,7 +133,8 @@ unsigned int Communities::getCommunityBoundaryEdges(unsigned int s) {
 
     igraph_vector_ptr_t p;
     err = igraph_vector_ptr_init(&p, cSize);
-    err = igraph_neighborhood(graph, &p, *vs, 1, IGRAPH_ALL, 1);
+    //err = igraph_neighborhood(graph, &p, *vs, 1, IGRAPH_ALL, 1);
+    err = igraph_neighborhood(graph, &p, *vs, 1, IGRAPH_ALL);
     // la componente i-esima di p contiene l'elenco di vicini di ordine 1
     // dell'i-esimo nodo della community (quindi anche sé stesso)
 
