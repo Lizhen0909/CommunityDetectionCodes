@@ -8,27 +8,35 @@ int main(int argc, char *argv[]) {
     const char *src = "";
     const char *dest = "";
     int nthreads;
+    int directed=0;
     cout << "argc: " << argc << endl;
     switch (argc) {
-        case 3:
+        case 4:
             mode = 1;
             nthreads = atoi(argv[1]);
             src = argv[2];
+	    if (string("dir") == argv[3]) directed=true;
             break;
 
-        case 4:
+        case 5:
             mode = 2;
             nthreads = atoi(argv[1]);
             src = argv[2];
-            dest = argv[3];
+	    if (string("dir") == argv[3]) directed=1;
+            dest = argv[4];
             break;
 
         default:
-            cerr << "Sinopsi: " << argv[0] << " nThreads src [dest]" << endl;
+            cerr << "Sinopsi: " << argv[0] << " nThreads src <dir|undir> [dest]" << endl;
             return EXIT_FAILURE;
     }
 
     cout << "EAGLE" << endl;
+    if (directed)
+	    cout <<  "directed graph" << endl;
+    else
+	    cout <<  "undirected graph" << endl;
+
     cout << "Caricato su: " << src << endl;
     if (mode == 2) cout << "Salvataggio dati su: " << dest << endl;
     cout << "Numero di thread usati: " << nthreads << endl;
@@ -47,7 +55,9 @@ int main(int argc, char *argv[]) {
     }
 
     cout << "Lettura grafo" << endl;
-    result = igraph_read_graph_graphml(&graph, instream, 0);
+    //result = igraph_read_graph_edgelist(&graph, instream, 0,directed);
+    result = igraph_read_graph_ncol(&graph, instream, 0,0, IGRAPH_ADD_WEIGHTS_YES, directed>0?IGRAPH_DIRECTED:IGRAPH_UNDIRECTED);
+
     cout << "OK." << endl;
 
     fclose(instream);

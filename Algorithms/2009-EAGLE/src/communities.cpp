@@ -103,7 +103,7 @@ unsigned int Communities::getCommunityInternalEdges(unsigned int s) {
 
     //creazione sottografo dal vertex_selector;
     igraph_t subgraph;
-    err = igraph_subgraph(graph, &subgraph, *vs);
+    err = igraph_induced_subgraph(graph, &subgraph, *vs, IGRAPH_SUBGRAPH_AUTO);
 
     // quello che ci interessa realmente
     unsigned int e = igraph_ecount(&subgraph);
