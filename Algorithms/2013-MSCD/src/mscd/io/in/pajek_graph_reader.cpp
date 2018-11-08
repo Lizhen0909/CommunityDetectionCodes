@@ -11,6 +11,7 @@
 #include "graph.h"
 #include <cstdio>
 #include <vector>
+#include <string.h>
 #include "registry.h"
 
 namespace mscd {

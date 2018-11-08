@@ -365,7 +365,7 @@ bool MSCD_LFK2::Run(const ds::Graph & g,
 
 /// Compare pairs <key,value> for value-based decreasing ordering
 struct great_sim {
-	bool operator() (const std::pair<long,preal> const & p1, const std::pair<long,preal> const & p2) const {
+	bool operator() (const std::pair<long,preal> & p1, const std::pair<long,preal> & p2) const {
 		return (p1.second > p2.second) || (p1.first < p2.first);
 	}
 };

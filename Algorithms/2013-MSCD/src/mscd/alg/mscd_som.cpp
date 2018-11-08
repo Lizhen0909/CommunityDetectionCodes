@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <map>
 #include <cmath>
+#include <limits>
+
 
 // Register algorithm
 #include "registry.h"

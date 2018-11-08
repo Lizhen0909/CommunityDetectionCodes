@@ -16,7 +16,7 @@
 #define USE_MULTITHREADING
 
 // Enable Armadillo for fast matrix operations in SOM (stability optimisation using matrices)
-//#define USE_ARMADILLO
+#define USE_ARMADILLO
 
 // Enable debug mode
 //#define __DEBUG__

@@ -6,10 +6,10 @@ CC = g++
 CFLAGS = -O3
 
 # Uncomment below to enable C++11 (needed when USE_MULTITHREADING is enabled in config.h)
-#CFLAGS += -std=c++11 -stdlib=libc++
+CFLAGS += -std=c++11 #-stdlib=libc++
 
 # Linker flags
-LDFLAGS =
+LDFLAGS = 
 
 # Include directories
 INCLUDES  =-I./src -I./src/mscd/alg -I./src/mscd/ds -I./src/mscd/io/in -I./src/mscd/io/out -I./src/toolkit
@@ -18,7 +18,7 @@ INCLUDES  =-I./src -I./src/mscd/alg -I./src/mscd/ds -I./src/mscd/io/in -I./src/m
 #INCLUDES += -I../armadillo-2.4.4/include
 
 # Uncomment below to add support from LAPACK and BLAS (enable USE_ARMADILLO in config.h and setup Armadillo configuration file accordingly)
-# LIBS = -llapack -lblas
+LIBS = -llapack -lblas -lpthread -larmadillo
 
 # Source files directory
 SRCPATH=src

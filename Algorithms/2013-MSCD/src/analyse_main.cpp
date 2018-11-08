@@ -6,6 +6,8 @@
 #include <cstdio>
 #include <deque>
 #include <cmath>
+#include <algorithm>
+#include <string.h>
 #include "communities.h"
 #include "community_reader.h"
 #include "registry.h"

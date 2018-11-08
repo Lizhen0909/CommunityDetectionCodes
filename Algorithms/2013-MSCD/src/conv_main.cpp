@@ -4,6 +4,7 @@
 
 #include <string>
 #include <cstdio>
+#include <string.h>
 #include "graph.h"
 #include "graph_reader.h"
 #include "graph_writer.h"

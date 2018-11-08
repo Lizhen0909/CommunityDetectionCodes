@@ -6,6 +6,7 @@
 #include <map>
 #include <ctime>
 #include <cstdio>
+#include <string.h>
 #include "graph.h"
 #include "communities.h"
 #include "graph_reader.h"

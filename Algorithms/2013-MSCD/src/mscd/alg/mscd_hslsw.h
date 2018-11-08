@@ -15,6 +15,7 @@
 #include <set>
 #include <map>
 #include <cmath>
+#include <algorithm>
 #include "graph.h"
 
 #ifdef USE_HASH_MAP
