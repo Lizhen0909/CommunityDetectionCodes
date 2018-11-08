@@ -23,20 +23,29 @@ shared_ptr < network > temporal_network::AddNetwork ( const string& filename, co
   shared_ptr < network > result ( new network() );
 
   while ( fline_tr( &fin, &fields, delimiters ) ){
-    if (fields.size() != 3) continue;                        //Simple format check
+    int k=fields.size();
+    if (k != 3 && k!=2) { //Simple format check
+	continue;                       
+	}
     
     for (int i = 0; i < 2; i++){                             //Add new edges to list
       if ( vertex_set.find(fields[i]) == vertex_set.end() ){
 	vertex_set.insert(fields[i]);
       }
     }
-
-    pair < double, bool > ret = check_str_to<double>(fields[2]);  //Get edge weight
-    if ( !ret.second ) continue;                          //Wrong format
+    double weight=1.0;
+    if (k==3) {
+	pair < double, bool > ret = check_str_to<double>(fields[2]);  //Get edge weight
+	if ( !ret.second ) {
+		//continue;                          //Wrong format
+	        throw std::invalid_argument( std::string("received invalid value ") + fields[2] );
+	}
+	weight=ret.first;
+   }
 
     result->addEdge(shared_ptr<string>( new string ( *(vertex_set.find(fields[0])) ) ), 
 	      shared_ptr<string>( new string ( *(vertex_set.find(fields[1])) ) ), 
-	      ret.first, directed );                      //Add to network
+	      weight, directed );                      //Add to network
   }
 
   networks.push_back(result);                                     //Add to time series

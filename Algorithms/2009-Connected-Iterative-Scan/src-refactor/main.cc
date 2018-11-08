@@ -115,7 +115,7 @@ Components(set<shared_ptr<string>, cmp_str_ptr> seed, shared_ptr<network> G, dou
  *@param lambda Value for density calculation
  */
 void ExpandSeed(set<shared_ptr<string>, cmp_str_ptr> &seed, shared_ptr<network> G, double lambda) {
-    cout << *(*seed.begin()) << ",,,";
+    //cout << *(*seed.begin()) << ",,,";
     map<shared_ptr<string>, pair<double, double>, cmp_str_ptr> members, neighbors;
     set<shared_ptr<string>, cmp_str_ptr> fringe;
     set<shared_ptr<string>, cmp_str_ptr>::iterator it_s;
@@ -341,7 +341,7 @@ int main(int argc, char **argv) {
 
     P.set<string>(&inputfile, "i", "network.dat");
     P.set<string>(&outputfile, "o", "clusters.dat");
-    P.set<string>(&delimiters, "dl", "|");
+    P.set<string>(&delimiters, "dl", " ");
     P.set<string>(&seed_file, "s", "seeds.dat");
     P.set<string>(&seed_delim, "sdl", "|");
     P.set<double>(&lambda, "l", 0);
@@ -384,11 +384,11 @@ int main(int argc, char **argv) {
             seed.insert(shared_ptr<string>(new string(*it_v)));
 
             ExpandSeed(seed, G, lambda);
-            cout << "!!!" << seed.size() << "\t:";
+            //cout << "!!!" << seed.size() << "\t:";
             for (auto str:seed) {
-                cout << *str << ",";
+              //  cout << *str << ",";
             }
-            cout << endl;
+            //cout << endl;
             results.insert(seed);
 
             //cout << seed.size() << endl;
@@ -396,6 +396,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    if(0)
     for (auto iter_tmp = results.begin(); iter_tmp != results.end(); ++iter_tmp) {
         for (auto iter_tmp2 = (*iter_tmp).begin(); iter_tmp2 != (*iter_tmp).end(); ++iter_tmp2) {
             cout << *(*iter_tmp2) << ",";
