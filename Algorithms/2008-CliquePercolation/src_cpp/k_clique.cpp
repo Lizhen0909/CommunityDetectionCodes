@@ -42,6 +42,7 @@ at most one edge between two nodes in the edge file.\n\
 Options:\n\
 \t-o=[outputfile] : Write output to a specified file.\n\
 \t-k=[clique size] : The size of the clique.\n\
+\t-w : weighted graph.\n \
 \t-v : Verbose mode.\n "
 
 //\t-w : Use weighted clique percolation.\n\
@@ -75,13 +76,13 @@ size_t determineHashSize(const size_t numElements, const size_t k)
 
 // determine the network size and number of links
 // same link must not be twice in the network!
-bool getNetSizeAndLinkNumbers(char * fileName, size_t & netSize, size_t & numLinks, std::list<Link> & linkList)
+bool getNetSizeAndLinkNumbers(char * fileName, size_t & netSize, size_t & numLinks, std::list<Link> & linkList, bool weighted)
 {
 
     std::ifstream myfile(fileName);
     std::string line;
     size_t source, dest;
-    float weight;
+    float weight=1;
     netSize=0;
     numLinks=0;
 
@@ -93,10 +94,17 @@ bool getNetSizeAndLinkNumbers(char * fileName, size_t & netSize, size_t & numLin
             if (!line.empty())
             {
                 std::istringstream is(line);  // Extract data using a stringstream.
-		if ((is >> source) && (is >> dest) && (is >> weight));
-		else {
-		  std::cerr<<"Error reading line "<<numLinks << std::endl;
-		  return false;}		
+		if (weighted){
+			if ((is >> source) && (is >> dest) && (is >> weight));
+			else {
+			  std::cerr<<"Error reading line "<<numLinks << std::endl;
+			  return false;}		
+		} else {
+			if ((is >> source) && (is >> dest) );
+			else {
+			  std::cerr<<"Error reading line "<<numLinks << std::endl;
+			  return false;}		
+		}
 
 		linkList.push_back(Link(source,dest,weight));
 
@@ -450,7 +458,7 @@ bool validateLinkList(std::list<Link> &linkList,size_t netSize,bool verbose){
 }
 
 
-int percolation(char * fileName, const size_t k, const size_t weighted, const float threshold, const size_t weightFunction, std::string outputFile,bool verbose,bool sanityCheck)
+int percolation(char * fileName, const size_t k, const size_t weighted, const float threshold, const size_t weightFunction, std::string outputFile,bool verbose,bool sanityCheck )
 {
     size_t numberOfLinks;
     size_t netSize;
@@ -458,7 +466,7 @@ int percolation(char * fileName, const size_t k, const size_t weighted, const fl
     
     // First read in the network from the file
     if (verbose) std::cout << "Reading in the network...\n";
-    if (!getNetSizeAndLinkNumbers(fileName, netSize, numberOfLinks,linkList)) return EXIT_FAILURE;    
+    if (!getNetSizeAndLinkNumbers(fileName, netSize, numberOfLinks,linkList,weighted>0)) return EXIT_FAILURE;    
     if (verbose) std::cout<< "Number of nodes: " << netSize << "\nNumber of links: " <<numberOfLinks << "\n";
 
     //Check that the edge list is valid, this will waste some time
@@ -497,6 +505,8 @@ int main(int argc, char* argv[])
 	outputFile = argv[i] + 3;
       else if (!strcmp(argv[i], "-v"))
 	verbose=true;
+      else if (!strcmp(argv[i], "-w"))
+	weighted=1;
 /*
       else if (!strcmp(argv[i], "-w"))
 	weighted = 1;
