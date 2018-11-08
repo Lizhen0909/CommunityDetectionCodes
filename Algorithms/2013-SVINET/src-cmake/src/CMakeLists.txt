@@ -13,5 +13,5 @@ find_package(Threads)
 
 add_executable(2013-svinet ${SOURCE_FILES})
 target_link_libraries(2013-svinet ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(2013-svinet gslcblas)
 target_link_libraries(2013-svinet gsl)
+target_link_libraries(2013-svinet gslcblas)
