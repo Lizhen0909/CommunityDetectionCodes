@@ -68,7 +68,7 @@ public:
     void rawPrint();
 
     void rawPrintInOrderOfAddition();
-
+    void rawPrintInOrderOfAddition(ostream& myfile);
     void prettyPrint();
 
     void prettyPrintFrontier();

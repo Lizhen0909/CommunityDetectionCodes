@@ -341,9 +341,11 @@ void community_finder::refreshAllSeedInternalCaches() {
 
 //TODO look up node names in map, here
 void community_finder::rawPrint() {
+	ofstream myfile;
+	  myfile.open ("cluster.output");
     for (vector<Seed *>::iterator seedItr = this->seeds.begin(); seedItr != this->seeds.end(); ++seedItr) {
         //(*seedItr)->rawPrint();
-        (*seedItr)->rawPrintInOrderOfAddition();
+        (*seedItr)->rawPrintInOrderOfAddition(myfile);
         //(*seedItr)->prettyPrintFrontier();
         //(*seedItr)->prettyPrintFrontier();
     }

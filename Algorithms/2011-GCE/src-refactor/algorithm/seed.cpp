@@ -484,11 +484,14 @@ void Seed::prettyPrintFrontier() {
 }
 
 void Seed::rawPrintInOrderOfAddition() {
+	rawPrintInOrderOfAddition(cout);
+}
+void Seed::rawPrintInOrderOfAddition(ostream& myfile) {
     for (vector<V>::iterator innerSeedItr = this->nodesInOrderOfAddition.begin();
          innerSeedItr != this->nodesInOrderOfAddition.end(); ++innerSeedItr) {
-        cout << theGlobalGraph.name_of_one_node_asString((*innerSeedItr)) << " ";
+        myfile << theGlobalGraph.name_of_one_node_asString((*innerSeedItr)) << " ";
     }
-    cout << endl;
+    myfile << endl;
 
 
 }
