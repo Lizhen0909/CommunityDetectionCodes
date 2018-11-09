@@ -492,7 +492,7 @@ public class CONGA {
                                 }
 
                                 if (!((HashSet) var10.get(var6)).add(var7)) {
-                                    sOutput("Duplicate edge: " + var6 + "/" + var7);
+                                    //sOutput("Duplicate edge: " + var6 + "/" + var7);
                                 }
 
                                 if (!var2) {

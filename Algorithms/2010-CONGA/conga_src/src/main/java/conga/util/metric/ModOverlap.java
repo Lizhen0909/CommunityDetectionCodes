@@ -149,7 +149,7 @@ public class ModOverlap {
                             }
 
                             if(!((HashSet)var6.get(var3)).add(var4)) {
-                                System.out.println("Duplicate edge: " + var3 + "/" + var4);
+                                //System.out.println("Duplicate edge: " + var3 + "/" + var4);
                             }
 
                             if(var6.get(var4) == null) {

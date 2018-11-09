@@ -33,7 +33,9 @@ libigraph.a:
 	cd Algorithms/2009-EAGLE/src/ && mkdir -p build && cd build &&cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_FLAGS=-I$(PROJDIR)/SubModules/igraph-0.7.1/include/ \
 	-DCMAKE_EXE_LINKER_FLAGS="-L$(PROJDIR)" -DCMAKE_CXX_STANDARD_LIBRARIES="-lxml2" ..  && make && cp 2009-eagle $(PROJDIR)
 
-2010-LinkCommunity: calcJaccards clusterJaccards
+2010-LinkCommunity: calcJaccards clusterJaccards link_clustering.sh
+link_clustering.sh:
+	cd Algorithms/2010-LinkCommunity/cpp && cp $@ $(PROJDIR) && chmod u+x $@
 calcJaccards:
 	cd Algorithms/2010-LinkCommunity/cpp && g++ -O5 -o calcJaccards calcAndWrite_Jaccards.cpp && cp calcJaccards $(PROJDIR)
 clusterJaccards:
