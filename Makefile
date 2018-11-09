@@ -45,9 +45,11 @@ clusterJaccards:
 conga-1.0-SNAPSHOT.jar:
 	cd Algorithms/2010-CONGA/conga_src && mvn package && cp target/$@ $(PROJDIR)
 
-2010-TopGC: topgc-1.0-SNAPSHOT.jar
+2010-TopGC: topgc-1.0-SNAPSHOT.jar mkidx
 topgc-1.0-SNAPSHOT.jar:
 	cd Algorithms/2010-TopGC/src_refactor && mvn package && cp target/$@ $(PROJDIR)
+mkidx:
+	cd Algorithms/2010-TopGC/src_original/Graphs/original && gcc mkidx.c -o mkidx && cp $@ $(PROJDIR)
 
 2010-iLCD: iLCD-source-1.0-SNAPSHOT.jar
 iLCD-source-1.0-SNAPSHOT.jar:

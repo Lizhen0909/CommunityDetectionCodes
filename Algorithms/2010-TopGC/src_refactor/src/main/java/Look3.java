@@ -122,7 +122,7 @@ public class Look3 {
         System.out.println("cache collisions " + cachecollisions + "/" + cacheupds + " (" + 100.0D * (double)cachecollisions / (double)cacheupds + "%)");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Look3 l = null;
 
         try {
@@ -151,6 +151,7 @@ public class Look3 {
                 } catch (Exception var11) {
                     System.out.println(var11);
                     var11.printStackTrace();
+		    throw var11;
                 }
             }
         }

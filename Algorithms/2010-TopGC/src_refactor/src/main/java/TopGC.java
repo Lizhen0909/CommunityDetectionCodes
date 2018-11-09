@@ -42,11 +42,11 @@ public class TopGC {
     private int threads;
     private Look3 look;
 
-    public static void main(String[] argv) throws FileNotFoundException, IOException {
+    public static void main(String[] argv) throws FileNotFoundException, Exception {
         new TopGC(argv);
     }
 
-    public TopGC(String[] argv) {
+    public TopGC(String[] argv) throws Exception {
         this.importantNeighbors = (int) Math.floor((double) (this.maxClusterSize / 2));
         this.numNodes = 0;
         this.checkArgsFirst(argv);
@@ -322,6 +322,7 @@ public class TopGC {
             }
         } catch (Exception var31) {
             System.out.println(var31);
+	    throw var31;
         }
 
     }

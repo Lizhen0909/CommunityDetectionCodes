@@ -14,6 +14,7 @@ struct list *Nodes[2];
 struct list *Edges[2];
 long Nnodes= 0;
 long Nedges = 0;
+long last_to = -1;
 int Wts = -1;
 int Line = 0;
 float Scale = 1.0;
@@ -22,7 +23,7 @@ void add(struct list **head, long data);
 void dowrite();
 void outInt(long data);
 
-main (int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
 	char inbuf[BUFSIZ];
 	int nf, ch;
 	long node, edgeto, last = -1;
@@ -62,6 +63,12 @@ main (int argc, char *argv[]) {
 			}
 			Nedges++;
 		}
+		if (last_to<edgeto) last_to=edgeto;
+		if (last_to<node) last_to=node;
+	}
+	while(last_to>=Nnodes){
+		add(Nodes, Nedges);
+		Nnodes++;
 	}
 	add(Nodes, Nedges);
 	fprintf(stderr, "%ld nodes, %ld edge words\n", Nnodes, Nedges);
