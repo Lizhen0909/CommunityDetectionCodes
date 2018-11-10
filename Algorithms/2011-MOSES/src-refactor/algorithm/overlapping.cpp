@@ -158,7 +158,7 @@ namespace overlapping {
         //PP(ging._p_out);
 
         if (option_loadOverlapping[0]) { // load  preexisting grouping
-            Pn("Preloading grouping '%s'", option_loadOverlapping);
+            //Pn("Preloading grouping '%s'", option_loadOverlapping);
             ifstream inFile(option_loadOverlapping);
             //for (int i=0; i<5; ++i)
             int lineNo = 0;
@@ -201,18 +201,18 @@ namespace overlapping {
 
 
         const int max_OuterIters = atoi(getenv("OUTER_ITERS") ?: "20");
-        PP(max_OuterIters);
+        //PP(max_OuterIters);
         for (int k = 0; k < max_OuterIters; k++) {
             MOSES_objective(ging);
             const size_t num_groups_before = ging.groups.size();
             ostringstream s;
             s << "Whole outer iter " << k << "/" << max_OuterIters;
-            Timer timer(s.str());
-            Pn("\ngrow seeds %d/%d", k, max_OuterIters);
+            //Timer timer(s.str());
+            //Pn("\ngrow seeds %d/%d", k, max_OuterIters);
             bool randomize_p_in;
             if (k < max_OuterIters / 2) {
                 randomize_p_in = true;
-                Pn("Random p_i for each edge that we try");
+                //Pn("Random p_i for each edge that we try");
                 estimate_p_in_and_p_out(ging); // this is just to estimate p_out
                 useOneNodeSeeds(ging, g, true);
                 estimate_p_in_and_p_out(ging);
@@ -237,11 +237,12 @@ namespace overlapping {
 
         int louvainStyle_iter = 0;
         const int max_louvainStyleIters = atoi(getenv("LOUVAIN_ITERS") ?: "10");
-        PP(max_louvainStyleIters);
+        //PP(max_louvainStyleIters);
         while (louvainStyle_iter != max_louvainStyleIters) {
             MOSES_objective(ging);
-            Timer timer("Whole Louvain iter");
-            Pn("\nLouvain-style iteration %d/%d", louvainStyle_iter++, max_louvainStyleIters);
+            //Timer timer("Whole Louvain iter");
+            //Pn("\nLouvain-style iteration %d/%d", louvainStyle_iter, max_louvainStyleIters);
+	    louvainStyle_iter++;
             louvainStyle(ging, g);
             tryDeletions(ging, louvainStyle_iter == max_louvainStyleIters);
             estimate_p_in_and_p_out(ging);
@@ -279,14 +280,14 @@ namespace overlapping {
 
     template<class N>
     static void useOneNodeSeeds(Grouping &ging, bloomGraph<N> &g, bool randomize_p_in) {
-        Timer timer(__FUNCTION__);
+        //Timer timer(__FUNCTION__);
         const int numTries = g.ecount() / 5;
-        P("  \n Now just use one-EDGE seeds at a time. Try %d edges\n", numTries);
+        //P("  \n Now just use one-EDGE seeds at a time. Try %d edges\n", numTries);
         // groupStats(ging, g);
         for (int x = 0; x < numTries; ++x) {
             if (x && numTries > 5 && x % (numTries / 5) == 0) {
-                PP(x);
-                PP(ging.groups.size());
+                //PP(x);
+                //PP(ging.groups.size());
             }
             // choose an edge at random, but prefer to use it iff it's sharedCommunities score is low.
             V e = V(drand48() * (2 * ging._g.ecount()));
@@ -319,7 +320,7 @@ namespace overlapping {
         int64 totalAssignments = 0; // to help calculate average communities per node.
         for (Group *group: ging.groups) {
             DYINGWORDS(group->vs.size() > 0) {
-                PP(group->vs.size());
+                //PP(group->vs.size());
             }
             group_sizes[group->vs.size()]++;
             totalAssignments += group->vs.size();
@@ -328,8 +329,7 @@ namespace overlapping {
         }
 
         //Perror("    %zd\n", ging.groups.size());
-        Pn("#groups=%zd. %zd nodes, out of %d, are in at least one community. avgs grps/node=%g", ging.groups.size(),
-           ging.vgroups_size(), g.vcount(), (double) totalAssignments / g.vcount());
+        //Pn("#groups=%zd. %zd nodes, out of %d, are in at least one community. avgs grps/node=%g", ging.groups.size(),           ging.vgroups_size(), g.vcount(), (double) totalAssignments / g.vcount());
 
         pair<size_t, int> group_size;
         size_t max_group_size = group_sizes.size() == 0 ? 0 : group_sizes.rbegin()->first;
@@ -337,12 +337,12 @@ namespace overlapping {
         int number_of_rows = (max_group_size / entries_per_row) + 1;
         for (int r = 0; r < number_of_rows; r++) {
             for (size_t c = r; c <= max_group_size; c += number_of_rows) {
-                if (group_sizes[c] > 0)
-                    P("%6d{%3zd}", group_sizes[c], c);
-                else
-                    P("           ");
-            }
-            P("\n");
+                if (group_sizes[c] > 0){
+                    //P("%6d{%3zd}", group_sizes[c], c);
+                }else{
+                    //P("           ");
+            }}
+            //P("\n");
         }
         { // now, just the randomized ones
             size_t max_group_size =
@@ -351,12 +351,13 @@ namespace overlapping {
             int number_of_rows = (max_group_size / entries_per_row) + 1;
             for (int r = 0; r < number_of_rows; r++) {
                 for (size_t c = r; c <= max_group_size; c += number_of_rows) {
-                    if (group_sizes_of_the_randomized[c] > 0)
-                        P("%6d{%3zd}", group_sizes_of_the_randomized[c], c);
-                    else
-                        P("           ");
+                    if (group_sizes_of_the_randomized[c] > 0){
+                        //P("%6d{%3zd}", group_sizes_of_the_randomized[c], c);
+                    }else{
+                        //P("           ");
+		    }
                 }
-                P("\n");
+                //P("\n");
             }
         }
 #if 0
@@ -365,11 +366,11 @@ namespace overlapping {
         ForeachContainer(Group *group, ging.groups) {
             if(group->vs.size() == max_group_size) {
                 ForeachContainer(V v, group->vs) {
-                    P("(%zd)", ging.vgroups(v).size());
+                    //P("(%zd)", ging.vgroups(v).size());
                     if(1 == ging.vgroups(v).size() && 0 == rand()%2)
                         lonelyNodesInLargestGroup.insert(v);
                 }
-                P("\n");
+                //P("\n");
                 largestGroup = group;
                 break;
             }
@@ -380,12 +381,12 @@ namespace overlapping {
             int print_count = 0;
             for (map<int, V>::const_iterator it = ging.global_edge_counts.begin();
                  it != ging.global_edge_counts.end(); ++it) {
-                P("%6d(%3d)", (int) it->second, (int) it->first);
+                //P("%6d(%3d)", (int) it->second, (int) it->first);
                 print_count++;
-                if (print_count % 15 == 0)
-                    P("\n");
-            }
-            P("\n");
+                if (print_count % 15 == 0){
+                    //P("\n");
+            }}
+            //P("\n");
             //if(0) update_p_out(ging);
             //PP(ging._p_in);
             //PP(ging._p_out);
@@ -563,7 +564,7 @@ namespace overlapping {
         assert(n_c > 0);
         assert(n_c <= N);
         if (logNchoose_vector.size() == 0) {
-            Timer t("logNchoose Initialization");
+            //Timer t("logNchoose Initialization");
             logNchoose_vector.resize(N + 1);
             // usedN = N;
 
@@ -723,14 +724,16 @@ namespace overlapping {
         //PP(frontier.size());
         const int erased = frontier.erase_this_node(r);
         DYINGWORDS(erased == 1) {
-            PP(erased);
-            PP(l);
-            PP(r);
+            //PP(erased);
+            //PP(l);
+            //PP(r);
             //PP(frontier.size());
-            PP(ging._g.degree(l));
-            PP(ging._g.degree(r));
+            //PP(ging._g.degree(l));
+            //PP(ging._g.degree(r));
             IteratorRange<const V *> ns(ging._g.neighbours(l));
-            Foreach(V n, ns) { PP(n); }
+            Foreach(V n, ns) { 
+		//PP(n); 
+	    }
         }
         assert(erased == 1);
         {
@@ -786,7 +789,7 @@ namespace overlapping {
 
     template<class N>
     static void louvainStyle(Grouping &ging, bloomGraph<N> &g) {
-        Timer t(__FUNCTION__);
+        //Timer t(__FUNCTION__);
         // find a node, isolate it from its communities, Add back one at a time if appropriate.
         const bool DEBUG_louvainStyle = 0;
         for (V v = 0; v < g.vcount(); v++) {
@@ -888,7 +891,7 @@ namespace overlapping {
     };
 
     static void tryMerges(Grouping &ging) {
-        Timer timer(__FUNCTION__);
+        //Timer timer(__FUNCTION__);
         typedef boost::unordered_map<pair<Group *, Group *>, long double, PairGroupHash> MergesT;
         MergesT proposed_merges;
         size_t counter = 0;
@@ -959,7 +962,7 @@ namespace overlapping {
                       /*100000 */
                       2 * ging._g.ecount(); e++) {
             if (e % (2 * ging._g.ecount() / 10) == 0) {
-                PP(e);
+                //PP(e);
             }
             V e2 = ging.comm_count_per_edge2[e].other_index;
             V l = ging._g.neighbours(0).first[e2];
@@ -1030,14 +1033,14 @@ namespace overlapping {
             }
             //if(score > -25.0) { printf("merge: %-11.2Lf\n", score); }
         }
-        PP(proposed_merges.size());
-        PP(merges_accepted);
-        PP(merges_applied);
+        //PP(proposed_merges.size());
+        //PP(merges_accepted);
+        //PP(merges_applied);
     }
 
     static void tryDeletions(Grouping &ging,
                              bool SaveScores /*= true*/) { // delete groups which aren't making a positive contribution any more.
-        Timer timer(__FUNCTION__);
+        //Timer timer(__FUNCTION__);
         typedef boost::unordered_map<Group *, long double, hashGroup> DeletionsT;
         DeletionsT proposed_deletions;
         const int64 N = ging._g.vcount();
@@ -1089,7 +1092,7 @@ namespace overlapping {
 
         V deletions_accepted = 0;
         map<V, int> deletions_sizes;
-        PP(ging.groups.size());
+        //PP(ging.groups.size());
         for (DeletionsT::const_iterator pm = proposed_deletions.begin(); pm != proposed_deletions.end(); ++pm) {
             const long double score = pm->second;
             //const int64 N = ging._g.vcount();
@@ -1107,13 +1110,13 @@ namespace overlapping {
                 }
             }
         }
-        P("deletions_accepted: %d\t", deletions_accepted);
+        //P("deletions_accepted: %d\t", deletions_accepted);
         pair<V, int> delete_size;
         for (delete_size: deletions_sizes) {
-            P("%d{%d} ", delete_size.second, delete_size.first);
+            //P("%d{%d} ", delete_size.second, delete_size.first);
         }
-        P("\n");
-        PP(ging.groups.size());
+        //P("\n");
+        //PP(ging.groups.size());
 
         //if(SaveScores && option_saveMOSESscores[0]) Pn("NOT Saving the delta-scores for each comm");
         if (SaveScores && option_saveMOSESscores[0]) {
@@ -1141,7 +1144,7 @@ namespace overlapping {
     }
 
     long double MOSES_objective(const Grouping &ging) {
-        Timer t(__FUNCTION__);
+        //Timer t(__FUNCTION__);
         // Three components
         // P(x|z)
         // Qz!
@@ -1164,7 +1167,7 @@ namespace overlapping {
         for (const Group *grp: ging.groups) {
             long double logNchoosen = logNchoose(N, grp->vs.size());
             DYINGWORDS(logNchoosen <= 0.0) {
-                PP(logNchoosen);
+                //PP(logNchoosen);
             }
             assert(logNchoosen <= 0.0);
             Pz += logNchoosen - log2l(N + 1);
@@ -1173,24 +1176,23 @@ namespace overlapping {
         // PP(Pz);
         // PP(Pxz + Pz);
         // PP(ging.value_of_objective_with_no_communities);
-        if (ging.value_of_objective_with_no_communities == 1.0)
-            Pn("Compression:\t%Lf\t%Lg\t%Lg", 1.0L, Pz, Pxz
-            );
-        else
-            Pn("Compression:\t%Lf\t%Lg\t%Lg", (Pxz + Pz) / ging.value_of_objective_with_no_communities, Pz, Pxz
-            );
+        if (ging.value_of_objective_with_no_communities == 1.0) {
+            //Pn("Compression:\t%Lf\t%Lg\t%Lg", 1.0L, Pz, Pxz            );
+        } else{
+	    //Pn("Compression:\t%Lf\t%Lg\t%Lg", (Pxz + Pz) / ging.value_of_objective_with_no_communities, Pz, Pxz            );
+	}
         return Pxz + Pz;
     }
 
     static void estimate_p_in_and_p_out(Grouping &ging) {
-        Timer t(__FUNCTION__);
+        //Timer t(__FUNCTION__);
         //PP(ging._sigma_shared);
 /*
 	int64 _sigma_shared2 = 0;
 	ForeachContainer(const Group *grp, ging.groups) {
 		_sigma_shared2 += int64(grp->vs.size()) * int64(grp->vs.size()-1);
 	}
-	PP(_sigma_shared2/2);
+	//PP(_sigma_shared2/2);
 	assert(_sigma_shared2 = 2 * ging._sigma_shared);
 */
         const int64 N = ging._g.vcount();
@@ -1220,7 +1222,7 @@ namespace overlapping {
 
         pair<long double, pair<long double, long double> > best;
         for (best: ALLlogP_XgivenZ) {
-            Pn("BEST: %Lg,%Lg -> %9.0Lf  ", best.second.first, best.second.second, best.first);
+            //Pn("BEST: %Lg,%Lg -> %9.0Lf  ", best.second.first, best.second.second, best.first);
             ging._p_in = best.second.first;
             ging._p_out = best.second.second;
             break;

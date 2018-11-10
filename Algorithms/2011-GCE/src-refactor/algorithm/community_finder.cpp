@@ -349,6 +349,7 @@ void community_finder::rawPrint() {
         //(*seedItr)->prettyPrintFrontier();
         //(*seedItr)->prettyPrintFrontier();
     }
+	myfile.close();
 }
 
 void community_finder::printSeeds() {

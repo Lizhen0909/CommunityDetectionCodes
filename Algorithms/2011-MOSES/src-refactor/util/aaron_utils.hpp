@@ -25,6 +25,9 @@ enum {
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
+string thousandsSeparated(uint64 x);
+
+#ifndef ASDAAAAAAAAAASDS
 #define P(...) printf(__VA_ARGS__)
 #define Pf(f, ...) fprintf(f, __VA_ARGS__)
 #define Perror(...) fprintf(stderr, __VA_ARGS__)
@@ -39,12 +42,32 @@ enum {
 #define PP4(w, x, y, z) cout << #w << ',' << #x << ',' << #y << ',' << #z << ":\t" << w << ',' << x << ',' << y << ',' << z << endl
 #define PPLg(x) Pn("%s:%20.11Lg", #x, x)
 
-string thousandsSeparated(uint64 x);
 
 #define PPdec(x) cout << #x << ":" << thousandsSeparated(x) << endl
 #define PPhex(x) cout << #x << ":" << std::hex << std::setw(20) << x << std::dec << endl
 #define Print(x)  P("%s", show(x).c_str())
 #define Printn(x) P("%s\n", show(x).c_str())
+#else
+#define P(...) 1
+#define Pf(f, ...) 1
+#define Perror(...) 1
+#define Pn(...) 1
+#define Perrorn(...) 1 
+//#define PP(x) Pn("%s:%s", #x, show(x).c_str())
+#define PP(x) 1
+#define PPt(x) 1
+#define PPnn(x) 1
+#define PP2(x, y) 1
+#define PP3(x, y, z) 1
+#define PP4(w, x, y, z) 1 
+#define PPLg(x)  1
+
+
+#define PPdec(x) 1
+#define PPhex(x) 1
+#define Print(x) 1
+#define Printn(x) 1
+#endif
 enum {
     EXIT_UNSPECIFIED = 1  // other (unspecified) error. Try to avoid using this
     , EXIT_FILEOPEN     // child process failed because it couldn't open the requested file
