@@ -718,7 +718,7 @@ LinkSampling::infer()
 
 	}
       }
-      if (n % 1000 == 0) {
+      if (n % 10000 == 0 && _iter % 10 ==0) {
 	printf("\riteration %d: processing %d links", _iter, n);
 	fflush(stdout);
       }

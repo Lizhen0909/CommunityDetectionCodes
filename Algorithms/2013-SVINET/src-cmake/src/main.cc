@@ -91,6 +91,7 @@ main(int argc, char **argv)
   bool randzeros = false;
   bool preprocess = false;
   bool strid = false;
+  bool weighted = false;
   string groups_file = "";
 
   uint32_t max_iterations = 0;
@@ -119,6 +120,8 @@ main(int argc, char **argv)
       run_gap = true;
     } else if (strcmp(argv[i], "-force") == 0) {
       force_overwrite_dir = true;
+    } else if (strcmp(argv[i], "-weighted") == 0) {
+      weighted = true;
     } else if (strcmp(argv[i], "-online") == 0) {
       online = true;
       batch = false;
@@ -261,7 +264,7 @@ main(int argc, char **argv)
 	  max_iterations, use_validation_stop, rand_seed,
 	  link_thresh, lt_min_deg,
 	  init_comm, init_comm_fname,
-	  link_sampling, gml, findk);
+	  link_sampling, gml, findk, weighted);
 
   env_global = &env;
   Network network(env);

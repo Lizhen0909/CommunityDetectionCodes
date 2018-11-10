@@ -10,7 +10,7 @@ static int scurr = 0;
 int
 Network::read(string s)
 {
-  fprintf(stdout, "+ Reading network from %s\n", s.c_str());
+  fprintf(stdout, "+ Reading network from %s. weighted=%d\n", s.c_str(), _env.weighted);
   FILE *f = fopen(s.c_str(), "r");
   if (!f) {
     lerr("error: cannot open file %s:%s", s.c_str(), strerror(errno));
@@ -19,11 +19,17 @@ Network::read(string s)
   char b1[512], b2[512];
   string s1, s2;
   uint32_t id1, id2;
-
+  float unused_float;
+  char  unused_char[512];
+  int status_code;
   while (!feof(f)) {
     fflush(stdout);
     if (_env.strid) {
-      if (fscanf(f, "%s"DELIM"%s\n", b1, b2) < 0) {
+	if (_env.weighted)
+		status_code=fscanf(f, "%s"DELIM"%s"DELIM"%f\n", b1, b2, &unused_char);
+	else
+		status_code=fscanf(f, "%s"DELIM"%s\n", b1, b2);
+      if (status_code < 0) {
 	printf("error: unexpected lines in file\n");
 	exit(-1);
       }
@@ -46,7 +52,11 @@ Network::read(string s)
       }
       id2 = _str2id[s2];
     } else {
-      if (fscanf(f, "%d"DELIM"%d\n", &id1, &id2) < 0) {
+	if (_env.weighted)
+		status_code=fscanf(f, "%d"DELIM"%d"DELIM"%f\n", &id1, &id2,&unused_float);
+	else
+		status_code=fscanf(f, "%d"DELIM"%d\n", &id1, &id2);
+      if (status_code < 0) {
 	printf("error: unexpected lines in file\n");
 	exit(-1);
       }

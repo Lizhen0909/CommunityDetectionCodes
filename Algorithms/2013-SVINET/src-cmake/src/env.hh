@@ -71,7 +71,7 @@ public:
       double rand_seed, 
       double link_thresh, uint32_t lt_min_deg,
       bool init_comm, string init_comm_fname,
-      bool link_sampling, bool gml, bool findk);
+      bool link_sampling, bool gml, bool findk, bool eighted);
 
   ~Env() { fclose(_plogf); }
 
@@ -88,7 +88,7 @@ public:
   bool informative_sampling;
   bool single;
   bool batch_mode;
-
+  bool weighted;
   int illegal_likelihood;
   int max_draw_edges;
   double meanchangethresh;
@@ -301,11 +301,11 @@ Env::Env(uint32_t N, uint32_t K, bool massive,
 	 double rand_seed,
 	 double link_thresh, uint32_t lt_min_deg,
 	 bool init_comm, string init_comm_fname,
-	 bool link_sampling_opt, bool gml, bool findk)
+	 bool link_sampling_opt, bool gml, bool findk,bool weighted)
   : n(N),
     k(K),
     t(2),
-
+    weighted(weighted),
     /* 
        PARAMETER: [mini-batch]
 
