@@ -6,6 +6,7 @@ Created on 18/mar/2013
 """
 import networkx as nx
 import random
+import sys 
 
 
 class Demon(object):
@@ -39,7 +40,7 @@ class Demon(object):
         self.weighted = weighted
         #######
 
-        print  'hello'
+        print  ('hello')
         all_communities = {}
 
         total_nodes = len(list(nx.nodes(self.G)))
@@ -64,7 +65,8 @@ class Demon(object):
         out_file_com = open("communities.txt", "w")
         idc = 0
         for c in all_communities.keys():
-            out_file_com.write("%d\t%s\n" % (idc, str(sorted(c))))
+            # out_file_com.write("%d\t%s\n" % (idc, str(sorted(c))))
+            out_file_com.write(" ".join ([str(u) for u in c])+"\n")
             idc += 1
         out_file_com.flush()
         out_file_com.close()
@@ -116,13 +118,13 @@ class Demon(object):
                             v = label_freq.get(nn_c)
                             # case of weighted graph
                             if self.weighted:
-                                label_freq[nn_c] = v + ego_minus_ego.edge[nn][n]['weight']
+                                label_freq[nn_c] = v + ego_minus_ego.edges[nn, n]['weight']
                             else:
                                 label_freq[nn_c] = v + 1
                         else:
                             # case of weighted graph
                             if self.weighted:
-                                label_freq[nn_c] = ego_minus_ego.edge[nn][n]['weight']
+                                label_freq[nn_c] = ego_minus_ego.edges[nn,n]['weight']
                             else:
                                 label_freq[nn_c] = 1
 
@@ -225,13 +227,25 @@ class Demon(object):
             return union
 
 
-#################################
-g = nx.Graph()
-fin = open("/home/cheyulin/GitRepos/SocialNetworkAnalysis/Codes-Yche/demo_input_files/karate_edges_input.csv")
-for l in fin:
-    l = l.rstrip().split(" ")
-    print  l[0] + ' ,' + l[1]
-    g.add_edge(l[0], l[1])
+if __name__ == "__main__":
+	if len(sys.argv) != 6:
+		print ("cmd <edgelist> <w/uw> <d|ud> <epsilon> <min_community_size>")
+		sys.exit(-1)
+	fname = sys.argv[1]
+	weighted = False 
+	directed = False 
+	if sys.argv[2] == 'w': weighted = True
+	if sys.argv[3] == 'd': directed = True 
+	epsilon = float(sys.argv[4])
+	mcz = float(sys.argv[5])
+	print ("use epsilon {}, mcz {}".format(epsilon, mcz))
 
-d = Demon()
-d.execute(g, epsilon=0.25)
+	container = nx.DiGraph() if directed else nx.Graph()
+	if weighted:
+		g = nx.read_weighted_edgelist(fname, create_using=container, nodetype=int)
+	else:
+		g = nx.read_edgelist(fname, create_using=container, nodetype=int)
+
+	d = Demon()
+	d.execute(g, epsilon=epsilon, min_community_size=mcz, weighted=weighted)
+

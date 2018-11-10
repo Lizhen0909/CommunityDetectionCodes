@@ -80,7 +80,10 @@ infomap_dir:
 2012-fast-cpm:
 	cd Algorithms/2012-Fast-Clique-Percolation/src_refactor/ && mkdir -p build && cd build && cmake .. && make &&  cp $@ $(PROJDIR)
 
-2012-CPMOnSteroids: 2012-ParCPM
+2012-CPMOnSteroids: 2012-ParCPM max-clique
+max-clique: 2012-ParCPM
+	cd Algorithms/2012-CPMOnSteroids/src_refactor/src/build &&  cp $@ $(PROJDIR)
+
 2012-ParCPM:
 	cd Algorithms/2012-CPMOnSteroids/src_refactor/src && mkdir -p build && cd build && cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_C_FLAGS=-I$(PROJDIR)/SubModules/igraph-0.7.1/include/ \
 	-DCMAKE_EXE_LINKER_FLAGS="-L$(PROJDIR)" -DCMAKE_C_STANDARD_LIBRARIES="-lxml2 -lm" .. && make &&  cp $@ $(PROJDIR)

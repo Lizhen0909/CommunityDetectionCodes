@@ -4,7 +4,7 @@ __license__ = "MIT"
 
 import networkx as nx
 import random
-
+import sys 
 
 class HDemon(object):
     """
@@ -44,8 +44,8 @@ class HDemon(object):
         level = 0
 
         while total_nodes > nx.number_connected_components(self.g) or level == 0:
-            print "\n------------------------\n" \
-                  "Starting level %d: nodes to process %d\n" % (level, total_nodes)
+            print ("\n------------------------\n" \
+                  "Starting level %d: nodes to process %d\n" % (level, total_nodes))
 
             out_file_graph = open("graph-%d" % level, "w")
             out_file_comm = open("communities-%d" % level, "w")
@@ -57,7 +57,7 @@ class HDemon(object):
 
             for ego in nx.nodes(self.g):
 
-                print "Ego-network analyzed: %d/%d" % (actual, total_nodes)
+                #print ("Ego-network analyzed: %d/%d" % (actual, total_nodes))
                 actual += 1
 
                 ego_minus_ego = nx.ego_graph(self.g, ego, 1, False)
@@ -80,7 +80,7 @@ class HDemon(object):
             total_nodes = len(self.g.nodes())
             level += 1
 
-        print "\nComputation ended: results available in the files graph-* and communities-*\n"
+        print ("\nComputation ended: results available in the files graph-* and communities-*\n")
         return
 
 
@@ -122,7 +122,7 @@ class HDemon(object):
 
             node_to_coms = {}
 
-            nodes = nx.nodes(ego_minus_ego)
+            nodes = list(nx.nodes(ego_minus_ego))
             random.shuffle(nodes)
 
             count = -len(nodes)
@@ -131,7 +131,7 @@ class HDemon(object):
 
                 label_freq = {}
 
-                n_neighbors = nx.neighbors(ego_minus_ego, n)
+                n_neighbors = list(nx.neighbors(ego_minus_ego, n))
                 if len(n_neighbors) < 1:
                     continue
 
@@ -187,7 +187,7 @@ class HDemon(object):
         com_to_id = {}
         for n in nx.nodes(ego_minus_ego):
 
-            if len(nx.neighbors(ego_minus_ego, n)) == 0:
+            if len(list(nx.neighbors(ego_minus_ego, n))) == 0:
                 ego_minus_ego.node[n]['communities'] = [n]
 
             c_n = ego_minus_ego.node[n]['communities']
@@ -208,8 +208,8 @@ class HDemon(object):
                     sorted(community_to_nodes[c])) in actual_coms:
                 # write the community
                 actual_coms[tuple(sorted(community_to_nodes[c]))] = com_to_id[c]
-                out_file_com.write("%d\t%s\n" % (com_to_id[c], str(sorted(community_to_nodes[c]))))
-
+                #out_file_com.write("%d\t%s\n" % (com_to_id[c], str(sorted(community_to_nodes[c]))))
+                out_file_com.write(" ".join ([str(u) for u in community_to_nodes[c]])+"\n")
                 # write the edges for the new graph
         for c2 in actual_coms:
             for c in actual_coms:
@@ -218,13 +218,25 @@ class HDemon(object):
 
         return len(nodes_to_com_id)
 
+if __name__ == "__main__":
+	if len(sys.argv) != 6:
+		print ("cmd <edgelist> <w/uw> <d|ud> <epsilon> <min_community_size>")
+		sys.exit(-1)
+	fname=sys.argv[1]
+	weighted=directed=False
+	if sys.argv[2]=='w': weighted=True
+	if sys.argv[3]=='d': directed=True
+	epsilon=float(sys.argv[4])
+	mcz=float(sys.argv[5])
+	print ("use epsilon {}, mcz {}".format(epsilon, mcz))
 
-###############################
-g = nx.Graph()
-fin = open("network.csv")
-for l in fin:
-    l = l.rstrip().split(",")
-    g.add_edge(l[0], l[1])
+	container = nx.DiGraph() if directed else nx.Graph()
+	if weighted:
+		g = nx.read_weighted_edgelist(fname, create_using=container, nodetype=int)
+	else:
+		g = nx.read_edgelist(fname, create_using=container, nodetype=int)
 
-d = HDemon(g, epsilon=0.25)
-d.execute()
+
+	d = HDemon(g, epsilon=epsilon,min_community_size=mcz)
+	d.execute()
+
