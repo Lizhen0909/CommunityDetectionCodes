@@ -28,7 +28,7 @@ libigraph.a:
 	fi
 	
 	cd SubModules/igraph-0.7.1 && ./configure && make -j4 && cp src/.libs/libigraph.a $(PROJDIR)
-2009-EAGLE: 2009-eagle igraph	
+2009-EAGLE: igraph 2009-eagle 
 2009-eagle: 
 	cd Algorithms/2009-EAGLE/src/ && mkdir -p build && cd build &&cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_FLAGS=-I$(PROJDIR)/SubModules/igraph-0.7.1/include/ \
 	-DCMAKE_EXE_LINKER_FLAGS="-L$(PROJDIR)" -DCMAKE_CXX_STANDARD_LIBRARIES="-lxml2" ..  && make && cp 2009-eagle $(PROJDIR)
@@ -84,7 +84,7 @@ infomap_dir:
 max-clique: 2012-ParCPM
 	cd Algorithms/2012-CPMOnSteroids/src_refactor/src/build &&  cp $@ $(PROJDIR)
 
-2012-ParCPM:
+2012-ParCPM: igraph
 	cd Algorithms/2012-CPMOnSteroids/src_refactor/src && mkdir -p build && cd build && cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_C_FLAGS=-I$(PROJDIR)/SubModules/igraph-0.7.1/include/ \
 	-DCMAKE_EXE_LINKER_FLAGS="-L$(PROJDIR)" -DCMAKE_C_STANDARD_LIBRARIES="-lxml2 -lm" .. && make &&  cp $@ $(PROJDIR)
 
