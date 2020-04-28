@@ -36,7 +36,7 @@ class Demon(object):
         self.epsilon = epsilon
         self.min_community_size = min_community_size
         for n in self.G.nodes():
-            G.node[n]['communities'] = [n]
+            G.nodes[n]['communities'] = [n]
         self.weighted = weighted
         #######
 
@@ -132,7 +132,7 @@ class Demon(object):
                 if t == 1:
                     if not len(n_neighbors) == 0:
                         r_label = random.sample(label_freq.keys(), 1)
-                        ego_minus_ego.node[n]['communities'] = r_label
+                        ego_minus_ego.nodes[n]['communities'] = r_label
                         old_node_to_coms[n] = r_label
                     count += 1
                     continue
@@ -153,7 +153,7 @@ class Demon(object):
 
                     if not n in old_node_to_coms or not set(node_to_coms[n]) == set(old_node_to_coms[n]):
                         old_node_to_coms[n] = node_to_coms[n]
-                        ego_minus_ego.node[n]['communities'] = labels
+                        ego_minus_ego.nodes[n]['communities'] = labels
 
             t += 1
 
@@ -161,9 +161,9 @@ class Demon(object):
         community_to_nodes = {}
         for n in nx.nodes(ego_minus_ego):
             if len(list(nx.neighbors(ego_minus_ego, n))) == 0:
-                ego_minus_ego.node[n]['communities'] = [n]
+                ego_minus_ego.nodes[n]['communities'] = [n]
 
-            c_n = ego_minus_ego.node[n]['communities']
+            c_n = ego_minus_ego.nodes[n]['communities']
 
             for c in c_n:
 
